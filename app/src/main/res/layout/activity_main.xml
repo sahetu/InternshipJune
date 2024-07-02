@@ -4,78 +4,58 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/text_20"
         android:layout_gravity="center"
-        android:layout_marginTop="50dp"
-        android:text="Login here"
-        android:textColor="#1E41BB"
-        android:textSize="20dp"
+        android:layout_marginTop="@dimen/_50sdp"
+        android:text="@string/login_here"
+        android:textColor="@color/blue"
         android:textStyle="bold" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/text_20"
         android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:text="Welcome back you've\nbeen missed!"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="@string/welcome_back"
         android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="20dp" />
+        android:textColor="@color/black" />
 
     <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="40dp"
+        style="@style/edit_16"
+        android:layout_marginTop="@dimen/_40sdp"
         android:drawableLeft="@drawable/mail"
-        android:drawablePadding="10dp"
-        android:hint="Email"
-        android:inputType="textEmailAddress" />
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"/>
 
     <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="10dp"
+        style="@style/edit_16"
+        android:layout_marginTop="@dimen/_10sdp"
         android:drawableLeft="@drawable/lock"
-        android:drawablePadding="10dp"
-        android:hint="Password"
-        android:inputType="textPassword" />
+        android:hint="@string/password"
+        android:inputType="textPassword"/>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/text_14"
         android:layout_gravity="end"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="20dp"
-        android:text="Forgot your password?"
-        android:textColor="#1E41BB"
-        android:textSize="14dp" />
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginRight="@dimen/_20sdp"
+        android:text="@string/forgot_password"
+        android:textColor="@color/blue" />
 
     <Button
-        app:backgroundTint="@null"
-        android:background="@drawable/custom_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="20dp"
-        android:text="Sign in"
-        android:textColor="@color/white"
-        android:textSize="16dp"
-        android:textStyle="bold" />
+        style="@style/button_16"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:text="@string/sign_in" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/text_14"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:text="create new account"
-        android:textColor="@color/black"
-        android:textSize="14dp" />
+        android:layout_marginTop="@dimen/_20sdp"
+        android:text="@string/create_account"
+        android:textColor="@color/black" />
 
 </LinearLayout>

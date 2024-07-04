@@ -4,7 +4,20 @@
     <string name="welcome_back">Welcome back you\'ve\nbeen missed!</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
     <string name="forgot_password">Forgot your password?</string>
     <string name="sign_in">Sign in</string>
     <string name="create_account">create new account</string>
+
+    <string name="create_account_title">Create Account</string>
+    <string name="create_account_desc">Create an account so you can explore all the existing jobs</string>
+    <string name="name">Name</string>
+    <string name="contact_no">Contact No.</string>
+
+    <string name="signup">Sign up</string>
+    <string name="already_account">Already have an account</string>
+
+    <string name="forgot_password_title">Forgot Password</string>
+    <string name="submit">Submit</string>
+
 </resources>

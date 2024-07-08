@@ -4,6 +4,9 @@
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
         <item name="fontFamily">@font/bree_serif</item>
+    </style>
+
+    <style name="bg_style">
         <item name="android:background">@color/black</item>
     </style>
 

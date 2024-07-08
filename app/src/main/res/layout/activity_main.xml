@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/bg_style"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
     tools:context=".MainActivity">
 
     <TextView
@@ -29,15 +29,40 @@
         android:layout_marginTop="@dimen/_40sdp"
         android:drawableLeft="@drawable/mail"
         android:hint="@string/email"
-        android:inputType="textEmailAddress"/>
+        android:inputType="textEmailAddress" />
 
-    <EditText
-        android:id="@+id/main_password"
-        style="@style/edit_16"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:drawableLeft="@drawable/lock"
-        android:hint="@string/password"
-        android:inputType="textPassword"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp">
+
+        <EditText
+            android:id="@+id/main_password"
+            style="@style/edit_16"
+            android:drawableLeft="@drawable/lock"
+            android:hint="@string/password"
+            android:inputType="textPassword" />
+
+        <ImageView
+            android:id="@+id/main_password_hide"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginRight="@dimen/_30sdp"
+            android:padding="@dimen/_2sdp"
+            android:src="@drawable/hide" />
+
+        <ImageView
+            android:id="@+id/main_password_show"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginRight="@dimen/_30sdp"
+            android:padding="@dimen/_2sdp"
+            android:src="@drawable/show"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/main_forgot_password"

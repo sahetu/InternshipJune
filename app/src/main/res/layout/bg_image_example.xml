@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/june_internship_bg" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#66FFFFFF" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/text_20"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_50sdp"
+            android:text="@string/login_here"
+            android:textColor="@color/blue"
+            android:textStyle="bold" />
+
+        <TextView
+            style="@style/text_20"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="@string/welcome_back"
+            android:textAlignment="center" />
+
+        <EditText
+            android:id="@+id/main_email"
+            style="@style/edit_16"
+            android:layout_marginTop="@dimen/_40sdp"
+            android:drawableLeft="@drawable/mail"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:id="@+id/main_password"
+            style="@style/edit_16"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:drawableLeft="@drawable/lock"
+            android:hint="@string/password"
+            android:inputType="textPassword" />
+
+        <TextView
+            android:id="@+id/main_forgot_password"
+            style="@style/text_14"
+            android:layout_gravity="end"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginRight="@dimen/_20sdp"
+            android:text="@string/forgot_password"
+            android:textColor="@color/blue" />
+
+        <Button
+            android:id="@+id/main_signin"
+            style="@style/button_16"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:text="@string/sign_in" />
+
+        <TextView
+            android:id="@+id/main_create_account"
+            style="@style/text_14"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:text="@string/create_account" />
+
+    </LinearLayout>
+
+</FrameLayout>

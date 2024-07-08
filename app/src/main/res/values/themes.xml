@@ -8,6 +8,10 @@
 
     <style name="Theme.InternshipJune" parent="Base.Theme.InternshipJune" />
 
+    <style name="bg_style">
+        <item name="android:background">@color/white</item>
+    </style>
+
     <style name="text_20" parent="Widget.AppCompat.TextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

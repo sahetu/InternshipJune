@@ -1,5 +1,7 @@
 package internship.june;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,11 +21,17 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     Button submit;
 
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
+    SQLiteDatabase db;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
+
+        db = openOrCreateDatabase("AndroidInternshipJune.db",MODE_PRIVATE,null);
+        String tableQuery = "CREATE TABLE IF NOT EXISTS USERS(USERID INTEGER PRIMARY KEY AUTOINCREMENT,NAME VARCHAR(50),EMAIL VARCHAR(50),CONTACT BIGINT(10),PASSWORD VARCHAR(20))";
+        db.execSQL(tableQuery);
 
         email = findViewById(R.id.forgot_password_email);
         password = findViewById(R.id.forgot_password_password);
@@ -56,8 +64,21 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     confirmpassword.setError("Password Does Not Match");
                 }
                 else{
-                    Toast.makeText(ForgotPasswordActivity.this, "Password Changed Successfully", Toast.LENGTH_SHORT).show();
-                    onBackPressed();
+                    /*Toast.makeText(ForgotPasswordActivity.this, "Password Changed Successfully", Toast.LENGTH_SHORT).show();
+                    onBackPressed();*/
+                    String selectQuery = "SELECT * FROM USERS WHERE EMAIL='"+email.getText().toString()+"'";
+                    Cursor cursor = db.rawQuery(selectQuery,null);
+                    if(cursor.getCount()>0){
+                        //password change
+                        String updateQuery = "UPDATE USERS SET PASSWORD='"+password.getText().toString()+"' WHERE EMAIL='"+email.getText().toString()+"'";
+                        db.execSQL(updateQuery);
+                        Toast.makeText(ForgotPasswordActivity.this, "Password Changed Successfully", Toast.LENGTH_SHORT).show();
+                        onBackPressed();
+                    }
+                    else{
+                        //Invalid Valid
+                        Toast.makeText(ForgotPasswordActivity.this, "Invalid Email Id", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

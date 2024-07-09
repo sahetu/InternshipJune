@@ -1,9 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    style="@style/bg_style"
     tools:context=".DashboardActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/dashboard_name"
+        android:text="Welcome NAME"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_gravity="center"
+        style="@style/text_20"/>
+
+    <Button
+        android:id="@+id/dashboard_profile"
+        android:text="Profile"
+        android:layout_marginTop="@dimen/_20sdp"
+        style="@style/button_16"/>
+
+    <Button
+        android:id="@+id/dashboard_delete_profile"
+        android:text="Delete Profile"
+        android:layout_marginTop="@dimen/_10sdp"
+        style="@style/button_16"/>
+
+    <Button
+        android:id="@+id/dashboard_logout"
+        android:text="Logout"
+        android:layout_marginTop="@dimen/_10sdp"
+        style="@style/button_16"/>
+
+</LinearLayout>

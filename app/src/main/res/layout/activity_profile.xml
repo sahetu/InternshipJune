@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/bg_style"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfileActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/profile_name"
+            style="@style/edit_16"
+            android:layout_marginTop="@dimen/_40sdp"
+            android:drawableLeft="@drawable/mail"
+            android:hint="@string/name"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/profile_contact"
+            style="@style/edit_16"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:drawableLeft="@drawable/mail"
+            android:hint="@string/contact_no"
+            android:inputType="phone"
+            android:maxLength="10" />
+
+        <EditText
+            android:id="@+id/profile_email"
+            style="@style/edit_16"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:drawableLeft="@drawable/mail"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:id="@+id/profile_password"
+            style="@style/edit_16"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:drawableLeft="@drawable/lock"
+            android:hint="@string/password"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:visibility="gone"
+            android:id="@+id/profile_confirm_password"
+            style="@style/edit_16"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:drawableLeft="@drawable/lock"
+            android:hint="@string/confirm_password"
+            android:inputType="textPassword" />
+
+        <Button
+            android:id="@+id/profile_edit"
+            style="@style/button_16"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:text="Edit Profile" />
+
+        <Button
+            android:visibility="gone"
+            android:id="@+id/profile_update"
+            style="@style/button_16"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:text="Submit" />
+
+    </LinearLayout>
+
+</ScrollView>

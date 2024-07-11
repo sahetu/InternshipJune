@@ -11,5 +11,13 @@ public class ConstantSp {
     public static final String PASSWORD = "password";
 
     public static final String CATEGORYID = "categoryid";
+    public static final String SUBCATEGORYID = "subcategoryid";
 
+    public static final String PRICE_SYMBOL = "₹";
+
+    public static final String PRODUCTID = "productid";
+    public static final String PRODUCTNAME = "productname";
+    public static final String PRODUCTPRICE = "productprice";
+    public static final String PRODUCTDESC = "productdesc";
+    public static final String PRODUCTIMAGE = "productimage";
 }

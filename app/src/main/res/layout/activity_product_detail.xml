@@ -40,6 +40,12 @@
                 android:id="@+id/product_detail_desc"
                 style="@style/text_14"
                 android:layout_marginTop="@dimen/_3sdp" />
+
+            <Button
+                android:layout_marginTop="@dimen/_10sdp"
+                android:id="@+id/product_detail_pay"
+                android:text="Pay Now"
+                style="@style/button_16"/>
             
         </LinearLayout>
 

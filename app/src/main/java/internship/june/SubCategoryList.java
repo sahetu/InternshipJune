@@ -2,22 +2,22 @@ package internship.june;
 
 public class SubCategoryList {
 
-    int id,categoryId,image;
-    String name;
+    int image;
+    String id,categoryId,name;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public int getCategoryId() {
+    public String getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(int categoryId) {
+    public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
     }
 

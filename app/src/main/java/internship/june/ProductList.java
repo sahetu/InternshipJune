@@ -2,22 +2,22 @@ package internship.june;
 
 public class ProductList {
 
-    int id,subCatId,image;
-    String name,price,Desc;
+    int image;
+    String id,subCatId,name,price,Desc;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public int getSubCatId() {
+    public String getSubCatId() {
         return subCatId;
     }
 
-    public void setSubCatId(int subCatId) {
+    public void setSubCatId(String subCatId) {
         this.subCatId = subCatId;
     }
 

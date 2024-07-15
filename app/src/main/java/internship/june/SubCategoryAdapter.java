@@ -53,7 +53,7 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sp.edit().putString(ConstantSp.SUBCATEGORYID, String.valueOf(arrayList.get(position).getId())).commit();
+                sp.edit().putString(ConstantSp.SUBCATEGORYID, arrayList.get(position).getId()).commit();
                 Intent intent = new Intent(context, ProductActivity.class);
                 context.startActivity(intent);
             }

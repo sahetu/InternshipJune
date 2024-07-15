@@ -1,6 +1,8 @@
 package internship.june;
 
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -18,19 +20,25 @@ public class SubCategoryActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
 
-    int[] idArray = {1,2,3,4,5,6,7,8};
-    int[] categoryIdArray = {1,1,2,2,2,2,2,2};
-    String[] nameArray = {"Allen Solly","US Polo","Allen Solly","US Polo","Mufti","Levis","Louis Philippe","H & M"};
-    int[] imageArray = {R.drawable.allen,R.drawable.uspolo,R.drawable.allen,R.drawable.uspolo,R.drawable.mufti,R.drawable.levis_logo,R.drawable.louis_logo,R.drawable.hm_logo};
-
     ArrayList<SubCategoryList> arrayList;
 
     SharedPreferences sp;
+    SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub_category);
+
+        db = openOrCreateDatabase("AndroidInternshipJune.db",MODE_PRIVATE,null);
+        String tableQuery = "CREATE TABLE IF NOT EXISTS USERS(USERID INTEGER PRIMARY KEY AUTOINCREMENT,NAME VARCHAR(50),EMAIL VARCHAR(50),CONTACT BIGINT(10),PASSWORD VARCHAR(20))";
+        db.execSQL(tableQuery);
+
+        String categoryQuery = "CREATE TABLE IF NOT EXISTS CATEGORY(CATEGORYID INTEGER PRIMARY KEY AUTOINCREMENT,NAME VARCHAR(50),IMAGE VARCHAR(100))";
+        db.execSQL(categoryQuery);
+
+        String subCategoryQuery = "CREATE TABLE IF NOT EXISTS SUBCATEGORY(SUBCATEGORYID INTEGER PRIMARY KEY AUTOINCREMENT,CATEGORYID VARCHAR(10),NAME VARCHAR(50),IMAGE VARCHAR(100))";
+        db.execSQL(subCategoryQuery);
 
         sp = getSharedPreferences(ConstantSp.PREF,MODE_PRIVATE);
 
@@ -38,18 +46,30 @@ public class SubCategoryActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        arrayList = new ArrayList<>();
-        for(int i=0;i<idArray.length;i++){
-            if(Integer.parseInt(sp.getString(ConstantSp.CATEGORYID,"")) == categoryIdArray[i]) {
+        String selectQuery = "SELECT * FROM SUBCATEGORY WHERE CATEGORYID='"+sp.getString(ConstantSp.CATEGORYID,"")+"'";
+        Cursor cursor = db.rawQuery(selectQuery,null);
+        if(cursor.getCount()>0){
+            arrayList = new ArrayList<>();
+            while (cursor.moveToNext()){
+                SubCategoryList list = new SubCategoryList();
+                list.setId(cursor.getString(0));
+                list.setCategoryId(cursor.getString(1));
+                list.setName(cursor.getString(2));
+                list.setImage(Integer.parseInt(cursor.getString(3)));
+                arrayList.add(list);
+            }
+            SubCategoryAdapter adapter = new SubCategoryAdapter(SubCategoryActivity.this,arrayList);
+            recyclerView.setAdapter(adapter);
+        }
+
+        /*arrayList = new ArrayList<>();
+        if(Integer.parseInt(sp.getString(ConstantSp.CATEGORYID,"")) == categoryIdArray[i]) {
                 SubCategoryList list = new SubCategoryList();
                 list.setId(idArray[i]);
                 list.setCategoryId(categoryIdArray[i]);
                 list.setName(nameArray[i]);
                 list.setImage(imageArray[i]);
                 arrayList.add(list);
-            }
-        }
-        SubCategoryAdapter adapter = new SubCategoryAdapter(SubCategoryActivity.this,arrayList);
-        recyclerView.setAdapter(adapter);
+            }*/
     }
 }

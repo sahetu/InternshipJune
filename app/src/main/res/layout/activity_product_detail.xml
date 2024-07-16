@@ -16,15 +16,15 @@
         android:padding="@dimen/_10sdp">
 
         <ImageView
-            android:layout_gravity="center"
             android:id="@+id/product_detail_image"
             android:layout_width="@dimen/_150sdp"
-            android:layout_height="@dimen/_150sdp" />
+            android:layout_height="@dimen/_150sdp"
+            android:layout_gravity="center" />
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/product_detail_name"
@@ -36,17 +36,38 @@
                 android:layout_marginTop="@dimen/_3sdp" />
 
             <TextView
-                android:justificationMode="inter_word"
                 android:id="@+id/product_detail_desc"
                 style="@style/text_14"
-                android:layout_marginTop="@dimen/_3sdp" />
+                android:layout_marginTop="@dimen/_3sdp"
+                android:justificationMode="inter_word" />
+
+            <LinearLayout
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/product_detail_wishlist"
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:src="@drawable/wishlist_blank" />
+
+                <ImageView
+                    android:id="@+id/product_detail_cart"
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:src="@drawable/add_cart" />
+
+            </LinearLayout>
 
             <Button
-                android:layout_marginTop="@dimen/_10sdp"
                 android:id="@+id/product_detail_pay"
-                android:text="Pay Now"
-                style="@style/button_16"/>
-            
+                style="@style/button_16"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="Pay Now" />
+
         </LinearLayout>
 
     </LinearLayout>

@@ -22,6 +22,12 @@
         style="@style/button_16"/>
 
     <Button
+        android:id="@+id/dashboard_wishlist"
+        android:text="Wishlist"
+        android:layout_marginTop="@dimen/_10sdp"
+        style="@style/button_16"/>
+
+    <Button
         android:id="@+id/dashboard_profile"
         android:text="Profile"
         android:layout_marginTop="@dimen/_10sdp"

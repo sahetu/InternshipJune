@@ -63,6 +63,9 @@ public class SplashActivity extends AppCompatActivity {
         String productQuery = "CREATE TABLE IF NOT EXISTS PRODUCT(PRODUCTID INTEGER PRIMARY KEY AUTOINCREMENT,SUBCATEGORYID VARCHAR(10),NAME VARCHAR(50),PRICE VARCHAR(20),IMAGE VARCHAR(100),DESCRIPTION TEXT)";
         db.execSQL(productQuery);
 
+        String wishlistQuery = "CREATE TABLE IF NOT EXISTS WISHLIST(WISHLISTID INTEGER PRIMARY KEY AUTOINCREMENT,USERID INTEGER(10),PRODUCTID INTEGER(10))";
+        db.execSQL(wishlistQuery);
+
         categoryStore();
         subCategoryStore();
         productDataStore();

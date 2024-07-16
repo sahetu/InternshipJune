@@ -1,10 +1,9 @@
 package internship.june;
 
-public class ProductList {
+public class WishlistList {
 
     int image;
-    String id,subCatId,name,price,Desc;
-    boolean isWishlist;
+    String wishlistId,productId,subCatId,name,price,Desc;
 
     public int getImage() {
         return image;
@@ -14,12 +13,20 @@ public class ProductList {
         this.image = image;
     }
 
-    public String getId() {
-        return id;
+    public String getWishlistId() {
+        return wishlistId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setWishlistId(String wishlistId) {
+        this.wishlistId = wishlistId;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public String getSubCatId() {
@@ -52,13 +59,5 @@ public class ProductList {
 
     public void setDesc(String desc) {
         Desc = desc;
-    }
-
-    public boolean isWishlist() {
-        return isWishlist;
-    }
-
-    public void setWishlist(boolean wishlist) {
-        isWishlist = wishlist;
     }
 }

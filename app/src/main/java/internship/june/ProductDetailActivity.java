@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
@@ -30,13 +33,32 @@ public class ProductDetailActivity extends AppCompatActivity implements PaymentR
     TextView name,price,desc;
 
     Button payNow;
+    ImageView wishlist,addCart;
 
     SharedPreferences sp;
+    SQLiteDatabase db;
+    boolean isWishlist = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
+
+        db = openOrCreateDatabase("AndroidInternshipJune.db",MODE_PRIVATE,null);
+        String tableQuery = "CREATE TABLE IF NOT EXISTS USERS(USERID INTEGER PRIMARY KEY AUTOINCREMENT,NAME VARCHAR(50),EMAIL VARCHAR(50),CONTACT BIGINT(10),PASSWORD VARCHAR(20))";
+        db.execSQL(tableQuery);
+
+        String categoryQuery = "CREATE TABLE IF NOT EXISTS CATEGORY(CATEGORYID INTEGER PRIMARY KEY AUTOINCREMENT,NAME VARCHAR(50),IMAGE VARCHAR(100))";
+        db.execSQL(categoryQuery);
+
+        String subCategoryQuery = "CREATE TABLE IF NOT EXISTS SUBCATEGORY(SUBCATEGORYID INTEGER PRIMARY KEY AUTOINCREMENT,CATEGORYID VARCHAR(10),NAME VARCHAR(50),IMAGE VARCHAR(100))";
+        db.execSQL(subCategoryQuery);
+
+        String productQuery = "CREATE TABLE IF NOT EXISTS PRODUCT(PRODUCTID INTEGER PRIMARY KEY AUTOINCREMENT,SUBCATEGORYID VARCHAR(10),NAME VARCHAR(50),PRICE VARCHAR(20),IMAGE VARCHAR(100),DESCRIPTION TEXT)";
+        db.execSQL(productQuery);
+
+        String wishlistQuery = "CREATE TABLE IF NOT EXISTS WISHLIST(WISHLISTID INTEGER PRIMARY KEY AUTOINCREMENT,USERID INTEGER(10),PRODUCTID INTEGER(10))";
+        db.execSQL(wishlistQuery);
 
         sp = getSharedPreferences(ConstantSp.PREF,MODE_PRIVATE);
 
@@ -56,6 +78,40 @@ public class ProductDetailActivity extends AppCompatActivity implements PaymentR
             @Override
             public void onClick(View view) {
                 startPayment();
+            }
+        });
+
+        wishlist = findViewById(R.id.product_detail_wishlist);
+        addCart = findViewById(R.id.product_detail_cart);
+
+        String selectQuery = "SELECT * FROM WISHLIST WHERE PRODUCTID='"+sp.getString(ConstantSp.PRODUCTID,"")+"' AND USERID='"+sp.getString(ConstantSp.USERID,"")+"'";
+        Cursor cursor = db.rawQuery(selectQuery,null);
+        if(cursor.getCount()>0){
+            isWishlist = true;
+            wishlist.setImageResource(R.drawable.wishlist_fill);
+        }
+        else{
+            isWishlist = false;
+            wishlist.setImageResource(R.drawable.wishlist_blank);
+        }
+
+        wishlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isWishlist){
+                    String deleteQuery = "DELETE FROM WISHLIST WHERE USERID='"+sp.getString(ConstantSp.USERID,"")+"' AND PRODUCTID='"+sp.getString(ConstantSp.PRODUCTID,"")+"'";
+                    db.execSQL(deleteQuery);
+                    Toast.makeText(ProductDetailActivity.this, "Product Removed From Wishlist", Toast.LENGTH_SHORT).show();
+                    wishlist.setImageResource(R.drawable.wishlist_blank);
+                    isWishlist = false;
+                }
+                else {
+                    String insertQuery = "INSERT INTO WISHLIST VALUES(NULL,'" + sp.getString(ConstantSp.USERID, "") + "','" + sp.getString(ConstantSp.PRODUCTID, "") + "')";
+                    db.execSQL(insertQuery);
+                    Toast.makeText(ProductDetailActivity.this, "Product Added In Wishlist", Toast.LENGTH_SHORT).show();
+                    wishlist.setImageResource(R.drawable.wishlist_fill);
+                    isWishlist = true;
+                }
             }
         });
 

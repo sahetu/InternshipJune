@@ -73,7 +73,7 @@ public class ProductActivity extends AppCompatActivity {
                 }
                 arrayList.add(list);
             }
-            ProductAdapter adapter = new ProductAdapter(ProductActivity.this,arrayList);
+            ProductAdapter adapter = new ProductAdapter(ProductActivity.this,arrayList,db);
             recyclerView.setAdapter(adapter);
         }
 

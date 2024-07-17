@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,14 +31,17 @@ import org.json.JSONObject;
 public class ProductDetailActivity extends AppCompatActivity implements PaymentResultWithDataListener {
 
     ImageView imageView;
-    TextView name,price,desc;
+    TextView name,price,desc,qty;
 
     Button payNow;
-    ImageView wishlist,addCart;
+    ImageView wishlist,addCart,plus,minus;
+
+    LinearLayout cartLayout;
 
     SharedPreferences sp;
     SQLiteDatabase db;
     boolean isWishlist = false;
+    int iQty = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +64,20 @@ public class ProductDetailActivity extends AppCompatActivity implements PaymentR
         String wishlistQuery = "CREATE TABLE IF NOT EXISTS WISHLIST(WISHLISTID INTEGER PRIMARY KEY AUTOINCREMENT,USERID INTEGER(10),PRODUCTID INTEGER(10))";
         db.execSQL(wishlistQuery);
 
+        String cartQuery = "CREATE TABLE IF NOT EXISTS CART(CARTID INTEGER PRIMARY KEY AUTOINCREMENT,ORDERID INTEGER(10),USERID INTEGER(10),PRODUCTID INTEGER(10),QTY INTEGER(3),PRICE VARCHAR(10),TOTALPRICE VARCHAR(10))";
+        db.execSQL(cartQuery);
+
         sp = getSharedPreferences(ConstantSp.PREF,MODE_PRIVATE);
 
         imageView = findViewById(R.id.product_detail_image);
         name = findViewById(R.id.product_detail_name);
         price = findViewById(R.id.product_detail_price);
         desc = findViewById(R.id.product_detail_desc);
+
+        cartLayout = findViewById(R.id.product_detail_cart_layout);
+        plus = findViewById(R.id.product_detail_plus);
+        minus = findViewById(R.id.product_detail_minus);
+        qty = findViewById(R.id.product_detail_qty);
 
         name.setText(sp.getString(ConstantSp.PRODUCTNAME,""));
         price.setText(ConstantSp.PRICE_SYMBOL+sp.getString(ConstantSp.PRODUCTPRICE,""));
@@ -83,6 +95,38 @@ public class ProductDetailActivity extends AppCompatActivity implements PaymentR
 
         wishlist = findViewById(R.id.product_detail_wishlist);
         addCart = findViewById(R.id.product_detail_cart);
+
+        String selectCartQuery = "SELECT * FROM CART WHERE USERID='"+sp.getString(ConstantSp.USERID,"")+"' AND PRODUCTID='"+sp.getString(ConstantSp.PRODUCTID,"")+"' AND ORDERID='0'";
+        Cursor cartCursor = db.rawQuery(selectCartQuery,null);
+        if(cartCursor.getCount()>0){
+            while (cartCursor.moveToNext()){
+                iQty = Integer.parseInt(cartCursor.getString(4));
+                qty.setText(String.valueOf(iQty));
+            }
+            addCart.setVisibility(View.GONE);
+            cartLayout.setVisibility(View.VISIBLE);
+        }
+        else{
+            addCart.setVisibility(View.VISIBLE);
+            cartLayout.setVisibility(View.GONE);
+        }
+
+
+        addCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iQty = 3;
+                int iPrice = Integer.parseInt(sp.getString(ConstantSp.PRODUCTPRICE,""));
+                int iTotalPrice = iQty * iPrice;
+                String insertQuery = "INSERT INTO CART VALUES(NULL,'0','"+sp.getString(ConstantSp.USERID,"")+"','"+sp.getString(ConstantSp.PRODUCTID,"")+"','"+iQty+"','"+iPrice+"','"+iTotalPrice+"')";
+                db.execSQL(insertQuery);
+                Toast.makeText(ProductDetailActivity.this, "Product Added In Cart Successfully", Toast.LENGTH_SHORT).show();
+
+                qty.setText(String.valueOf(iQty));
+                addCart.setVisibility(View.GONE);
+                cartLayout.setVisibility(View.VISIBLE);
+            }
+        });
 
         String selectQuery = "SELECT * FROM WISHLIST WHERE PRODUCTID='"+sp.getString(ConstantSp.PRODUCTID,"")+"' AND USERID='"+sp.getString(ConstantSp.USERID,"")+"'";
         Cursor cursor = db.rawQuery(selectQuery,null);

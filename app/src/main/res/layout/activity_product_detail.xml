@@ -42,9 +42,9 @@
                 android:justificationMode="inter_word" />
 
             <LinearLayout
-                android:layout_marginTop="@dimen/_10sdp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:gravity="center">
 
                 <ImageView
@@ -59,6 +59,33 @@
                     android:layout_height="@dimen/_25sdp"
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:src="@drawable/add_cart" />
+
+                <LinearLayout
+                    android:id="@+id/product_detail_cart_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:gravity="center"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/product_detail_minus"
+                        android:layout_width="@dimen/_25sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:src="@drawable/minus_icon" />
+
+                    <TextView
+                        android:id="@+id/product_detail_qty"
+                        style="@style/text_20"
+                        android:layout_marginHorizontal="@dimen/_10sdp" />
+
+                    <ImageView
+                        android:id="@+id/product_detail_plus"
+                        android:layout_width="@dimen/_25sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:src="@drawable/plus_icon" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

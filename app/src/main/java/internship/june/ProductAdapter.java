@@ -3,6 +3,7 @@ package internship.june;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +21,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyHolder
     ArrayList<ProductList> arrayList;
 
     SharedPreferences sp;
+    SQLiteDatabase db;
 
-    public ProductAdapter(Context context, ArrayList<ProductList> arrayList) {
+    public ProductAdapter(Context context, ArrayList<ProductList> arrayList, SQLiteDatabase db) {
         this.context = context;
         this.arrayList = arrayList;
+        this.db = db;
         sp = context.getSharedPreferences(ConstantSp.PREF,Context.MODE_PRIVATE);
     }
 
@@ -61,6 +64,22 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyHolder
             holder.wishlist.setImageResource(R.drawable.wishlist_blank);
         }
 
+        holder.wishlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(arrayList.get(position).isWishlist){
+                    String removewQuery = "DELETE FROM WISHLIST WHERE USERID='"+sp.getString(ConstantSp.USERID,"")+"' AND PRODUCTID='"+arrayList.get(position).getId()+"'";
+                    db.execSQL(removewQuery);
+                    setData(position,false);
+                }
+                else{
+                    String insertQuery = "INSERT INTO WISHLIST VALUES(NULL,'"+sp.getString(ConstantSp.USERID,"")+"','"+arrayList.get(position).getId()+"')";
+                    db.execSQL(insertQuery);
+                    setData(position,true);
+                }
+            }
+        });
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,6 +95,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyHolder
             }
         });
 
+    }
+
+    private void setData(int position, boolean b) {
+        ProductList list = new ProductList();
+        list.setId(arrayList.get(position).getId());
+        list.setSubCatId(arrayList.get(position).getSubCatId());
+        list.setName(arrayList.get(position).getName());
+        list.setPrice(arrayList.get(position).getPrice());
+        list.setDesc(arrayList.get(position).getDesc());
+        list.setImage(arrayList.get(position).getImage());
+        list.setWishlist(b);
+        arrayList.set(position,list);
+        notifyDataSetChanged();
     }
 
     @Override

@@ -115,7 +115,7 @@ public class ProductDetailActivity extends AppCompatActivity implements PaymentR
         addCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                iQty = 3;
+                iQty = 1;
                 int iPrice = Integer.parseInt(sp.getString(ConstantSp.PRODUCTPRICE,""));
                 int iTotalPrice = iQty * iPrice;
                 String insertQuery = "INSERT INTO CART VALUES(NULL,'0','"+sp.getString(ConstantSp.USERID,"")+"','"+sp.getString(ConstantSp.PRODUCTID,"")+"','"+iQty+"','"+iPrice+"','"+iTotalPrice+"')";
@@ -125,6 +125,27 @@ public class ProductDetailActivity extends AppCompatActivity implements PaymentR
                 qty.setText(String.valueOf(iQty));
                 addCart.setVisibility(View.GONE);
                 cartLayout.setVisibility(View.VISIBLE);
+            }
+        });
+
+        plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iQty += 1; //iQty = iQty+1
+                updateMethod(iQty,"Update");
+            }
+        });
+
+        minus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iQty -= 1; //iQty = iQty-1
+                if(iQty<=0){
+                    updateMethod(iQty, "Delete");
+                }
+                else {
+                    updateMethod(iQty, "Update");
+                }
             }
         });
 
@@ -159,6 +180,24 @@ public class ProductDetailActivity extends AppCompatActivity implements PaymentR
             }
         });
 
+    }
+
+    private void updateMethod(int iQty, String type) {
+        int iProductAmount = Integer.parseInt(sp.getString(ConstantSp.PRODUCTPRICE,""));
+        int iTotalPrice = iQty * iProductAmount;
+        if(type.equalsIgnoreCase("Update")) {
+            String updateQuery = "UPDATE CART SET QTY='" + iQty + "',TOTALPRICE='" + iTotalPrice + "' WHERE PRODUCTID='" + sp.getString(ConstantSp.PRODUCTID, "") + "' AND USERID='" + sp.getString(ConstantSp.USERID, "") + "' AND ORDERID='0'";
+            db.execSQL(updateQuery);
+            //Toast.makeText(ProductDetailActivity.this, "Cart Updated Successfully", Toast.LENGTH_SHORT).show();
+            qty.setText(String.valueOf(iQty));
+        }
+        else{
+            String deleteQuery = "DELETE FROM CART WHERE PRODUCTID='" + sp.getString(ConstantSp.PRODUCTID, "") + "' AND USERID='" + sp.getString(ConstantSp.USERID, "") + "' AND ORDERID='0'";
+            db.execSQL(deleteQuery);
+            Toast.makeText(ProductDetailActivity.this, "Product Removed From Cart Successfully", Toast.LENGTH_SHORT).show();
+            cartLayout.setVisibility(View.GONE);
+            addCart.setVisibility(View.VISIBLE);
+        }
     }
 
     private void startPayment() {

@@ -27,6 +27,13 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="text_16_match" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/_16sdp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="edit_16" parent="Widget.AppCompat.EditText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

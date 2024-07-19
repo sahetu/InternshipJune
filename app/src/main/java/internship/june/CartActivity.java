@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class CartActivity extends AppCompatActivity {
 
-    TextView total;
+    public static TextView total;
     Button checkout;
 
     RecyclerView recyclerView;
@@ -30,7 +30,7 @@ public class CartActivity extends AppCompatActivity {
 
     ArrayList<CartList> arrayList;
 
-    int iCartTotal = 0;
+    public static int iCartTotal = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +94,10 @@ public class CartActivity extends AppCompatActivity {
 
             total.setText("Total : "+ConstantSp.PRICE_SYMBOL+iCartTotal);
 
+        }
+        else{
+            iCartTotal = 0;
+            total.setText("Total : "+ConstantSp.PRICE_SYMBOL+iCartTotal);
         }
 
     }

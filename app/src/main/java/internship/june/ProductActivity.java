@@ -47,6 +47,9 @@ public class ProductActivity extends AppCompatActivity {
         String wishlistQuery = "CREATE TABLE IF NOT EXISTS WISHLIST(WISHLISTID INTEGER PRIMARY KEY AUTOINCREMENT,USERID INTEGER(10),PRODUCTID INTEGER(10))";
         db.execSQL(wishlistQuery);
 
+        String cartQuery = "CREATE TABLE IF NOT EXISTS CART(CARTID INTEGER PRIMARY KEY AUTOINCREMENT,ORDERID INTEGER(10),USERID INTEGER(10),PRODUCTID INTEGER(10),QTY INTEGER(3),PRICE VARCHAR(10),TOTALPRICE VARCHAR(10))";
+        db.execSQL(cartQuery);
+
         recyclerView = findViewById(R.id.product_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(ProductActivity.this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -71,6 +74,20 @@ public class ProductActivity extends AppCompatActivity {
                 else {
                     list.setWishlist(false);
                 }
+
+                String cartSelectQuery = "SELECT * FROM CART WHERE PRODUCTID='"+cursor.getString(0)+"' AND USERID='"+sp.getString(ConstantSp.USERID,"")+"' AND ORDERID='0'";
+                Cursor cartCursor = db.rawQuery(cartSelectQuery,null);
+                if(cartCursor.getCount()>0){
+                    while (cartCursor.moveToNext()){
+                        list.setCartId(cartCursor.getString(0));
+                        list.setQty(Integer.parseInt(cartCursor.getString(4)));
+                    }
+                }
+                else{
+                    list.setCartId("0");
+                    list.setQty(0);
+                }
+
                 arrayList.add(list);
             }
             ProductAdapter adapter = new ProductAdapter(ProductActivity.this,arrayList,db);

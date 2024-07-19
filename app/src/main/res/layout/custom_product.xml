@@ -25,6 +25,8 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
+                android:gravity="center"
+                android:orientation="vertical"
                 android:id="@+id/custom_product_cart_wish_layout"
                 android:layout_alignParentRight="true"
                 android:layout_width="wrap_content"
@@ -35,6 +37,38 @@
                     android:src="@drawable/wishlist_blank"
                     android:layout_width="@dimen/_25sdp"
                     android:layout_height="@dimen/_25sdp"/>
+
+                <ImageView
+                    android:id="@+id/custom_product_cart"
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:src="@drawable/add_cart" />
+
+                <LinearLayout
+                    android:id="@+id/custom_product_cart_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:visibility="visible">
+
+                    <ImageView
+                        android:id="@+id/custom_product_minus"
+                        android:layout_width="@dimen/_25sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:src="@drawable/minus_icon" />
+
+                    <TextView
+                        android:id="@+id/custom_product_qty"
+                        style="@style/text_20"
+                        android:layout_marginHorizontal="@dimen/_10sdp" />
+
+                    <ImageView
+                        android:id="@+id/custom_product_plus"
+                        android:layout_width="@dimen/_25sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:src="@drawable/plus_icon" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

@@ -2,8 +2,8 @@ package internship.june;
 
 public class ProductList {
 
-    int image;
-    String id,subCatId,name,price,Desc;
+    int image,qty;
+    String id,subCatId,name,price,Desc,cartId;
     boolean isWishlist;
 
     public int getImage() {
@@ -12,6 +12,14 @@ public class ProductList {
 
     public void setImage(int image) {
         this.image = image;
+    }
+
+    public int getQty() {
+        return qty;
+    }
+
+    public void setQty(int qty) {
+        this.qty = qty;
     }
 
     public String getId() {
@@ -52,6 +60,14 @@ public class ProductList {
 
     public void setDesc(String desc) {
         Desc = desc;
+    }
+
+    public String getCartId() {
+        return cartId;
+    }
+
+    public void setCartId(String cartId) {
+        this.cartId = cartId;
     }
 
     public boolean isWishlist() {

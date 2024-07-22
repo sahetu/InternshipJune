@@ -1,9 +1,11 @@
 package internship.june;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -60,6 +62,15 @@ public class CartActivity extends AppCompatActivity {
 
         total = findViewById(R.id.cart_bottom_total);
         checkout = findViewById(R.id.cart_bottom_checkout);
+
+        checkout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sp.edit().putString(ConstantSp.CARTTOTAL,String.valueOf(iCartTotal)).commit();
+                Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
+                startActivity(intent);
+            }
+        });
 
         recyclerView = findViewById(R.id.cart_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(CartActivity.this));

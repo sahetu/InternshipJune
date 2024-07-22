@@ -20,4 +20,7 @@ public class ConstantSp {
     public static final String PRODUCTPRICE = "productprice";
     public static final String PRODUCTDESC = "productdesc";
     public static final String PRODUCTIMAGE = "productimage";
+
+    public static final String CARTTOTAL = "cart_total";
+
 }

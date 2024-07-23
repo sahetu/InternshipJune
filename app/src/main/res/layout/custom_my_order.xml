@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginVertical="@dimen/_5sdp"
+    android:layout_marginHorizontal="@dimen/_10sdp"
+    app:cardCornerRadius="@dimen/_5sdp"
+    app:cardElevation="@dimen/_3sdp"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:padding="@dimen/_5sdp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_weight="1"
+                android:id="@+id/custom_my_order_no"
+                style="@style/text_16_match"/>
+
+            <TextView
+                android:gravity="end"
+                android:layout_weight="1"
+                android:id="@+id/custom_my_order_amount"
+                style="@style/text_16_match"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_marginTop="@dimen/_3sdp"
+            android:id="@+id/custom_my_order_address"
+            style="@style/text_14"/>
+
+        <TextView
+            android:layout_marginTop="@dimen/_3sdp"
+            android:id="@+id/custom_my_order_payment_type"
+            style="@style/text_14"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

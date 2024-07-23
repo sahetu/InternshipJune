@@ -34,6 +34,12 @@
         style="@style/button_16"/>
 
     <Button
+        android:id="@+id/dashboard_orders"
+        android:text="My Orders"
+        android:layout_marginTop="@dimen/_10sdp"
+        style="@style/button_16"/>
+
+    <Button
         android:id="@+id/dashboard_profile"
         android:text="Profile"
         android:layout_marginTop="@dimen/_10sdp"

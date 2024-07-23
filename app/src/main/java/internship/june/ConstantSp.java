@@ -23,4 +23,11 @@ public class ConstantSp {
 
     public static final String CARTTOTAL = "cart_total";
 
+    public static final String ORDERID = "order_id";
+    public static final String ORDER_PRICE = "order_price";
+    public static final String ORDER_ADDRESS = "order_address";
+    public static final String ORDER_CITY = "order_city";
+    public static final String ORDER_PAYMENT_TYPE = "order_payment_type";
+    public static final String ORDER_TRANSACTION_ID = "order_transaction_id";
+
 }

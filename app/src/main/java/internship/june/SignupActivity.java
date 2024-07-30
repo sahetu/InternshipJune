@@ -1,7 +1,9 @@
 package internship.june;
 
+import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +16,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -82,20 +89,73 @@ public class SignupActivity extends AppCompatActivity {
                     confirmpassword.setError("Password Does Not Match");
                 }
                 else{
-                    String selectQuery = "SELECT * FROM USERS WHERE EMAIL='"+email.getText().toString()+"' OR CONTACT='"+contact.getText().toString()+"'";
-                    Cursor cursor = db.rawQuery(selectQuery,null);
-                    if(cursor.getCount()>0){
-                        Toast.makeText(SignupActivity.this, "Email Id/Contact No. Already Registered", Toast.LENGTH_SHORT).show();
+                    //doSqliteSignup();
+                    if(new ConnectionDetector(SignupActivity.this).networkConnected()){
+                        //Toast.makeText(SignupActivity.this, "Internet/Wifi Connected", Toast.LENGTH_SHORT).show();
+                        new doSignup().execute();
                     }
-                    else {
-                        String insertQuery = "INSERT INTO USERS VALUES (NULL,'" + name.getText().toString() + "','" + email.getText().toString() + "','" + contact.getText().toString() + "','" + password.getText().toString() + "')";
-                        db.execSQL(insertQuery);
-                        Toast.makeText(SignupActivity.this, "Signup Successfully", Toast.LENGTH_SHORT).show();
-                        onBackPressed();
+                    else{
+                        new ConnectionDetector(SignupActivity.this).networkDisconnected();
                     }
                 }
             }
         });
 
+    }
+
+    private void doSqliteSignup() {
+        String selectQuery = "SELECT * FROM USERS WHERE EMAIL='"+email.getText().toString()+"' OR CONTACT='"+contact.getText().toString()+"'";
+        Cursor cursor = db.rawQuery(selectQuery,null);
+        if(cursor.getCount()>0){
+            Toast.makeText(SignupActivity.this, "Email Id/Contact No. Already Registered", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            String insertQuery = "INSERT INTO USERS VALUES (NULL,'" + name.getText().toString() + "','" + email.getText().toString() + "','" + contact.getText().toString() + "','" + password.getText().toString() + "')";
+            db.execSQL(insertQuery);
+            Toast.makeText(SignupActivity.this, "Signup Successfully", Toast.LENGTH_SHORT).show();
+            onBackPressed();
+        }
+    }
+
+    private class doSignup extends AsyncTask<String,String,String> {
+
+        ProgressDialog pd;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(SignupActivity.this);
+            pd.setMessage("Please Wait...");
+            pd.setCancelable(false);
+            pd.show();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            HashMap<String,String> hashMap = new HashMap<>();
+            hashMap.put("name",name.getText().toString());
+            hashMap.put("email",email.getText().toString());
+            hashMap.put("contact",contact.getText().toString());
+            hashMap.put("password",password.getText().toString());
+            return new MakeServiceCall().MakeServiceCall("http://192.168.1.40/internship_june_api/signup.php",MakeServiceCall.POST,hashMap);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            pd.dismiss();
+            try {
+                JSONObject object = new JSONObject(s);
+                if(object.getBoolean("status")){
+                    Toast.makeText(SignupActivity.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+                    onBackPressed();
+                }
+                else{
+                    Toast.makeText(SignupActivity.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

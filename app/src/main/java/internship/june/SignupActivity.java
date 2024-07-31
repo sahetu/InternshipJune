@@ -137,7 +137,7 @@ public class SignupActivity extends AppCompatActivity {
             hashMap.put("email",email.getText().toString());
             hashMap.put("contact",contact.getText().toString());
             hashMap.put("password",password.getText().toString());
-            return new MakeServiceCall().MakeServiceCall("http://192.168.1.40/internship_june_api/signup.php",MakeServiceCall.POST,hashMap);
+            return new MakeServiceCall().MakeServiceCall(ConstantSp.SIGNUP_URL,MakeServiceCall.POST,hashMap);
         }
 
         @Override

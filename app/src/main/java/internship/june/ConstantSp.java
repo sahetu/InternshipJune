@@ -2,9 +2,11 @@ package internship.june;
 
 public class ConstantSp {
 
-    public static final String BASE_URL = "http://192.168.86.61/internship_june_api/";
+    public static final String BASE_URL = "http://192.168.1.40/internship_june_api/";
     public static final String SIGNUP_URL = BASE_URL+"signup.php";
     public static final String LOGIN_URL = BASE_URL+"login.php";
+    public static final String UPDATE_PROFILE_URL = BASE_URL+"update_profile.php";
+    public static final String DELETE_PROFILE_URL = BASE_URL+"delete_profile.php";
 
     public static final String PREF = "pref";
 

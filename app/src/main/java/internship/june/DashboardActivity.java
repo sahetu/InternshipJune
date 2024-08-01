@@ -1,13 +1,16 @@
 package internship.june;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
@@ -15,6 +18,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 public class DashboardActivity extends AppCompatActivity {
 
@@ -87,13 +95,13 @@ public class DashboardActivity extends AppCompatActivity {
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String deleteQuery = "DELETE FROM USERS WHERE USERID='"+sp.getString(ConstantSp.USERID,"")+"'";
-                        db.execSQL(deleteQuery);
-
-                        sp.edit().clear().commit();
-                        Intent intent = new Intent(DashboardActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
+                        //doDelete();
+                        if(new ConnectionDetector(DashboardActivity.this).networkConnected()){
+                            new doDeleteAsync().execute();
+                        }
+                        else{
+                            new ConnectionDetector(DashboardActivity.this).networkDisconnected();
+                        }
                     }
                 });
 
@@ -147,6 +155,16 @@ public class DashboardActivity extends AppCompatActivity {
 
     }
 
+    private void doDelete() {
+        String deleteQuery = "DELETE FROM USERS WHERE USERID='"+sp.getString(ConstantSp.USERID,"")+"'";
+        db.execSQL(deleteQuery);
+
+        sp.edit().clear().commit();
+        Intent intent = new Intent(DashboardActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
@@ -157,5 +175,47 @@ public class DashboardActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         welcome.setText("Welcome " + sp.getString(ConstantSp.NAME, ""));
+    }
+
+    private class doDeleteAsync extends AsyncTask<String,String,String> {
+
+        ProgressDialog pd;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(DashboardActivity.this);
+            pd.setMessage("Please Wait...");
+            pd.setCancelable(false);
+            pd.show();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            HashMap<String,String> hashMap = new HashMap<>();
+            hashMap.put("userid",sp.getString(ConstantSp.USERID,""));
+            return new MakeServiceCall().MakeServiceCall(ConstantSp.DELETE_PROFILE_URL,MakeServiceCall.POST,hashMap);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            pd.dismiss();
+            try {
+                JSONObject object = new JSONObject(s);
+                if(object.getBoolean("status")){
+                    Toast.makeText(DashboardActivity.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+                    sp.edit().clear().commit();
+                    Intent intent = new Intent(DashboardActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else{
+                    Toast.makeText(DashboardActivity.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,6 +25,10 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class DashboardActivity extends AppCompatActivity {
 
     TextView welcome;
@@ -31,12 +36,14 @@ public class DashboardActivity extends AppCompatActivity {
 
     SharedPreferences sp;
     SQLiteDatabase db;
+    ApiInterface apiInterface;
+    ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-
+        apiInterface = ApiClient.getClient().create(ApiInterface.class);
         sp = getSharedPreferences(ConstantSp.PREF, MODE_PRIVATE);
 
         db = openOrCreateDatabase("AndroidInternshipJune.db", MODE_PRIVATE, null);
@@ -97,7 +104,12 @@ public class DashboardActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         //doDelete();
                         if(new ConnectionDetector(DashboardActivity.this).networkConnected()){
-                            new doDeleteAsync().execute();
+                            //new doDeleteAsync().execute();
+                            pd = new ProgressDialog(DashboardActivity.this);
+                            pd.setMessage("Please Wait...");
+                            pd.setCancelable(false);
+                            pd.show();
+                            doDeleteRetrofit();
                         }
                         else{
                             new ConnectionDetector(DashboardActivity.this).networkDisconnected();
@@ -153,6 +165,37 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void doDeleteRetrofit() {
+        Call<GetSignupData> call = apiInterface.doDeleteData(sp.getString(ConstantSp.USERID,""));
+        call.enqueue(new Callback<GetSignupData>() {
+            @Override
+            public void onResponse(Call<GetSignupData> call, Response<GetSignupData> response) {
+                pd.dismiss();
+                if(response.code()==200){
+                    if(response.body().status){
+                        Toast.makeText(DashboardActivity.this, response.body().message, Toast.LENGTH_SHORT).show();
+                        sp.edit().clear().commit();
+                        Intent intent = new Intent(DashboardActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                    else{
+                        Toast.makeText(DashboardActivity.this, response.body().message, Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else{
+                    Toast.makeText(DashboardActivity.this, "Server Error Code : "+response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetSignupData> call, Throwable t) {
+                pd.dismiss();
+                Log.d("RESPONSE_FAIL",t.getMessage());
+            }
+        });
     }
 
     private void doDelete() {

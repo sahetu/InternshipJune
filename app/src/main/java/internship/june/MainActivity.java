@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,6 +26,10 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity {
 
     Button signin;
@@ -38,12 +43,14 @@ public class MainActivity extends AppCompatActivity {
     ImageView hideIv,showIv;
 
     SharedPreferences sp;
+    ApiInterface apiInterface;
+    ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        apiInterface = ApiClient.getClient().create(ApiInterface.class);
         sp = getSharedPreferences(ConstantSp.PREF,MODE_PRIVATE);
 
         db = openOrCreateDatabase("AndroidInternshipJune.db",MODE_PRIVATE,null);
@@ -116,7 +123,12 @@ public class MainActivity extends AppCompatActivity {
                 else {
                     //doLoginSqlite(view);
                     if(new ConnectionDetector(MainActivity.this).networkConnected()){
-                        new doLogin().execute();
+                        //new doLogin().execute();
+                        pd = new ProgressDialog(MainActivity.this);
+                        pd.setMessage("Please Wait...");
+                        pd.setCancelable(false);
+                        pd.show();
+                        doLoginRetrofit();
                     }
                     else{
                         new ConnectionDetector(MainActivity.this).networkDisconnected();
@@ -125,6 +137,42 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void doLoginRetrofit() {
+        Call<GetLoginData> call = apiInterface.doLoginData(email.getText().toString(),password.getText().toString());
+        call.enqueue(new Callback<GetLoginData>() {
+            @Override
+            public void onResponse(Call<GetLoginData> call, Response<GetLoginData> response) {
+                pd.dismiss();
+                if(response.code()==200){
+                    if(response.body().status){
+                        Toast.makeText(MainActivity.this, response.body().message, Toast.LENGTH_SHORT).show();
+                        for(int i=0;i<response.body().userDetails.size();i++){
+                            sp.edit().putString(ConstantSp.USERID,response.body().userDetails.get(i).userid).commit();
+                            sp.edit().putString(ConstantSp.NAME,response.body().userDetails.get(i).name).commit();
+                            sp.edit().putString(ConstantSp.EMAIL,response.body().userDetails.get(i).email).commit();
+                            sp.edit().putString(ConstantSp.CONTACT,response.body().userDetails.get(i).contact).commit();
+                            sp.edit().putString(ConstantSp.PASSWORD,"").commit();
+                        }
+                        Intent intent = new Intent(MainActivity.this,DashboardActivity.class);
+                        startActivity(intent);
+                    }
+                    else{
+                        Toast.makeText(MainActivity.this, response.body().message, Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else{
+                    Toast.makeText(MainActivity.this, "Serever Error Code : "+response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetLoginData> call, Throwable t) {
+                pd.dismiss();
+                Log.d("RESPONSE_ERROR",t.getMessage());
+            }
+        });
     }
 
     private void doLoginSqlite(View view) {

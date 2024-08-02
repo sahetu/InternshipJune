@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +23,10 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class SignupActivity extends AppCompatActivity {
 
     EditText name,contact,email,password,confirmpassword;
@@ -31,11 +36,16 @@ public class SignupActivity extends AppCompatActivity {
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
     SQLiteDatabase db;
+    ApiInterface apiInterface;
+
+    ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
+        apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
         db = openOrCreateDatabase("AndroidInternshipJune.db",MODE_PRIVATE,null);
         String tableQuery = "CREATE TABLE IF NOT EXISTS USERS(USERID INTEGER PRIMARY KEY AUTOINCREMENT,NAME VARCHAR(50),EMAIL VARCHAR(50),CONTACT BIGINT(10),PASSWORD VARCHAR(20))";
@@ -92,7 +102,12 @@ public class SignupActivity extends AppCompatActivity {
                     //doSqliteSignup();
                     if(new ConnectionDetector(SignupActivity.this).networkConnected()){
                         //Toast.makeText(SignupActivity.this, "Internet/Wifi Connected", Toast.LENGTH_SHORT).show();
-                        new doSignup().execute();
+                        //new doSignup().execute();
+                        pd = new ProgressDialog(SignupActivity.this);
+                        pd.setMessage("Please Wait...");
+                        pd.setCancelable(false);
+                        pd.show();
+                        doSignupRetrofit();
                     }
                     else{
                         new ConnectionDetector(SignupActivity.this).networkDisconnected();
@@ -101,6 +116,34 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void doSignupRetrofit() {
+        Call<GetSignupData> call = apiInterface.doSignupData(name.getText().toString(),email.getText().toString(),contact.getText().toString(),password.getText().toString());
+        call.enqueue(new Callback<GetSignupData>() {
+            @Override
+            public void onResponse(Call<GetSignupData> call, Response<GetSignupData> response) {
+                pd.dismiss();
+                if(response.code()==200){
+                    if(response.body().status){
+                        Toast.makeText(SignupActivity.this, response.body().message, Toast.LENGTH_SHORT).show();
+                        onBackPressed();
+                    }
+                    else{
+                        Toast.makeText(SignupActivity.this, response.body().message, Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else{
+                    Toast.makeText(SignupActivity.this, "Server Error Code : "+response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetSignupData> call, Throwable t) {
+                pd.dismiss();
+                Log.d("RESPONSE_CATCH",t.getMessage());
+            }
+        });
     }
 
     private void doSqliteSignup() {

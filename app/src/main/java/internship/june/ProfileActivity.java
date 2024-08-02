@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +24,10 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ProfileActivity extends AppCompatActivity {
 
     EditText name,contact,email,password,confirmpassword;
@@ -32,6 +37,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     SQLiteDatabase db;
     SharedPreferences sp;
+    ApiInterface apiInterface;
+    ProgressDialog pd;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +46,7 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         sp = getSharedPreferences(ConstantSp.PREF,MODE_PRIVATE);
+        apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
         db = openOrCreateDatabase("AndroidInternshipJune.db",MODE_PRIVATE,null);
         String tableQuery = "CREATE TABLE IF NOT EXISTS USERS(USERID INTEGER PRIMARY KEY AUTOINCREMENT,NAME VARCHAR(50),EMAIL VARCHAR(50),CONTACT BIGINT(10),PASSWORD VARCHAR(20))";
@@ -87,7 +95,12 @@ public class ProfileActivity extends AppCompatActivity {
                 else{
                     //doUpdate();
                     if(new ConnectionDetector(ProfileActivity.this).networkConnected()){
-                        new doUpdateAsync().execute();
+                        //new doUpdateAsync().execute();
+                        pd = new ProgressDialog(ProfileActivity.this);
+                        pd.setMessage("Please Wait...");
+                        pd.setCancelable(false);
+                        pd.show();
+                        doUpdateRetro();
                     }
                     else{
                         new ConnectionDetector(ProfileActivity.this).networkDisconnected();
@@ -105,6 +118,34 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void doUpdateRetro() {
+        Call<GetSignupData> call = apiInterface.doUpdateProfileData(sp.getString(ConstantSp.USERID,""),name.getText().toString(),email.getText().toString(),contact.getText().toString(),password.getText().toString());
+        call.enqueue(new Callback<GetSignupData>() {
+            @Override
+            public void onResponse(Call<GetSignupData> call, Response<GetSignupData> response) {
+                pd.dismiss();
+                if(response.body().status){
+                    Toast.makeText(ProfileActivity.this, response.body().message, Toast.LENGTH_SHORT).show();
+                    sp.edit().putString(ConstantSp.NAME,name.getText().toString()).commit();
+                    sp.edit().putString(ConstantSp.EMAIL,email.getText().toString()).commit();
+                    sp.edit().putString(ConstantSp.CONTACT,contact.getText().toString()).commit();
+                    sp.edit().putString(ConstantSp.PASSWORD,password.getText().toString()).commit();
+
+                    setData(false);
+                }
+                else{
+                    Toast.makeText(ProfileActivity.this, response.body().message, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetSignupData> call, Throwable t) {
+                pd.dismiss();
+                Log.d("RESPONSE_FAIL",t.getMessage());
+            }
+        });
     }
 
     private void doUpdate() {

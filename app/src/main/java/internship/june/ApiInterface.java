@@ -7,15 +7,34 @@ import retrofit2.http.POST;
 
 public interface ApiInterface {
 
-    /*@FormUrlEncoded
+    @FormUrlEncoded
     @POST("signup.php")
-    Call<GetSignupData> getSignupData(
-            @Field("username") String username,
+    Call<GetSignupData> doSignupData(
             @Field("name") String name,
             @Field("email") String email,
             @Field("contact") String contact,
-            @Field("password") String password,
-            @Field("gender") String gender,
-            @Field("city") String city
-    );*/
+            @Field("password") String password
+    );
+
+    @FormUrlEncoded
+    @POST("login.php")
+    Call<GetLoginData> doLoginData(
+            @Field("email") String email,
+            @Field("password") String password
+    );
+
+    @FormUrlEncoded
+    @POST("update_profile.php")
+    Call<GetSignupData> doUpdateProfileData(
+            @Field("userid") String userid,
+            @Field("name") String name,
+            @Field("email") String email,
+            @Field("contact") String contact,
+            @Field("password") String password
+    );
+
+    @FormUrlEncoded
+    @POST("delete_profile.php")
+    Call<GetSignupData> doDeleteData(@Field("userid") String userid);
+
 }

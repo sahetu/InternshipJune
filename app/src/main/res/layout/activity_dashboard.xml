@@ -40,6 +40,18 @@
         style="@style/button_16"/>
 
     <Button
+        android:id="@+id/dashboard_activity_fragment"
+        android:text="Activity To Fragment"
+        android:layout_marginTop="@dimen/_10sdp"
+        style="@style/button_16"/>
+
+    <Button
+        android:id="@+id/dashboard_tab_demo"
+        android:text="Tab Layout"
+        android:layout_marginTop="@dimen/_10sdp"
+        style="@style/button_16"/>
+
+    <Button
         android:id="@+id/dashboard_profile"
         android:text="Profile"
         android:layout_marginTop="@dimen/_10sdp"

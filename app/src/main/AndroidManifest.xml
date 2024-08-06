@@ -16,6 +16,16 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".NavDemoActivity"
+            android:exported="false"
+            android:label="@string/title_activity_nav_demo"
+            android:theme="@style/Theme.InternshipJune.NoActionBar" />
+        <activity
+            android:name=".BottomNavDemoActivity"
+            android:exported="false"
+            android:label="@string/title_activity_bottom_nav_demo"
+            android:theme="@style/BottomNav" />
+        <activity
             android:name=".TabDemoActivity"
             android:exported="false" />
         <activity

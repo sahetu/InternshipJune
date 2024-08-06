@@ -32,7 +32,7 @@ import retrofit2.Response;
 public class DashboardActivity extends AppCompatActivity {
 
     TextView welcome;
-    Button profile, delete, logout,category,wishlist,cart,myorder,activityToFragment,tabDemo;
+    Button profile, delete, logout,category,wishlist,cart,myorder,activityToFragment,tabDemo,bottomNav,navigationDemo;
 
     SharedPreferences sp;
     SQLiteDatabase db;
@@ -57,6 +57,24 @@ public class DashboardActivity extends AppCompatActivity {
         profile = findViewById(R.id.dashboard_profile);
         delete = findViewById(R.id.dashboard_delete_profile);
         logout = findViewById(R.id.dashboard_logout);
+
+        navigationDemo = findViewById(R.id.dashboard_navigation);
+        navigationDemo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DashboardActivity.this, NavDemoActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        bottomNav = findViewById(R.id.dashboard_bottom);
+        bottomNav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DashboardActivity.this, BottomNavDemoActivity.class);
+                startActivity(intent);
+            }
+        });
 
         tabDemo = findViewById(R.id.dashboard_tab_demo);
         tabDemo.setOnClickListener(new View.OnClickListener() {
